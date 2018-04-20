@@ -103,6 +103,7 @@ SET(SRC_LIBPROJ_PJ
         PJ_mbtfpp.c
         PJ_mbtfpq.c
         PJ_merc.c
+        PJ_merc_nav.c
         PJ_mill.c
         PJ_mod_ster.c
         PJ_moll.c
