@@ -15,14 +15,33 @@ around a given latitude and longitude.
 | **Defined area**    | Global, although only one hemisphere can be seen at a  |
 |                     | time                                                   |
 +---------------------+--------------------------------------------------------+
-| **Options**                                                                  |
+| **Alias**           | ortho                                                  |
 +---------------------+--------------------------------------------------------+
-| `+lon_0`            | Longitudinal projection center. Defaults to 0.0.       |
+| **Domain**          | 2D                                                     |
 +---------------------+--------------------------------------------------------+
-| `+lat_0`            | Latitudinal projection center. Defaults to 0.0.        |
+| **Input type**      | Geodetic coordinates                                   |
++---------------------+--------------------------------------------------------+
+| **Output type**     | Projected coordinates                                  |
 +---------------------+--------------------------------------------------------+
 
-.. image:: ./images/ortho.png
-   :scale: 50%
+.. figure:: ./images/ortho.png
+   :width: 500 px
+   :align: center
    :alt:   Orthographic
 
+   proj-string: ``+proj=ortho``
+
+Parameters
+################################################################################
+
+.. note:: All parameters for the projection are optional.
+
+.. include:: ../options/lon_0.rst
+
+.. include:: ../options/lat_0.rst
+
+.. include:: ../options/R.rst
+
+.. include:: ../options/x_0.rst
+
+.. include:: ../options/y_0.rst

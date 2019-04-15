@@ -1,39 +1,14 @@
 .. _home:
 
-******************************************************************************
 PROJ
-******************************************************************************
-
-PROJ is a standard UNIX filter function which converts geographic longitude
-and latitude coordinates into cartesian coordinates (and vice versa), and it is
-a C API for software developers to include coordinate transformation in their
-own software. PROJ is maintained on `GitHub <http://github.com/OSGeo/proj.4/>`_.
-
-
-=============  ================================================================
- Platform                Test Status and Coverage
-=============  ================================================================
-Travis         |travis|
-AppVeyor       |appveyor|
-Coverage       |coverals|
-=============  ================================================================
-
-.. |travis| image:: https://travis-ci.org/OSGeo/proj.4.svg?branch=master
-                    :target:  https://travis-ci.org/OSGeo/proj.4
-.. |appveyor| image:: https://ci.appveyor.com/api/projects/status/584j49uguwoo5evi?svg=true
-                    :target: https://ci.appveyor.com/project/OSGeo/proj-4
-.. |coverals| image:: https://coveralls.io/repos/OSGeo/proj.4/badge.svg?branch=master
-                    :target: https://coveralls.io/r/OSGeo/proj.4?branch=master
-
-Full documentation is available as a single PDF at
-https://raw.githubusercontent.com/OSGeo/proj.4/gh-pages/proj4.pdf
-
-Documentation
-=================
+###############################################################################
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 4
+   :hidden:
 
+   about
+   news
    download
    install
    usage/index
@@ -42,20 +17,36 @@ Documentation
    resource_files
    geodesic
    development/index
+   community/index
    faq
-   contributing
    glossary
-   license
-   references
+   zreferences
 
-Mailing List
-================================================================================
+.. only:: html
 
-The PROJ mailing list can be found at http://lists.maptools.org/mailman/listinfo/proj
+    PROJ is a generic coordinate transformation software that transforms geospatial
+    coordinates from one coordinate reference system (CRS) to another. This
+    includes cartographic projections as well as geodetic transformations.
 
-Indices and tables
-==================
+    PROJ includes :ref:`command line applications<apps>` for easy conversion of
+    coordinates from text files or directly from user input. In addition to the
+    command line utilities PROJ also exposes an
+    :ref:`application programming interface<reference>`, or API in short. The API
+    lets developers use the functionality of PROJ in their own software without having
+    to implement similar functionality themselves.
 
-* :ref:`genindex`
-* :ref:`search`
+    PROJ started purely as a cartography application letting users convert geodetic
+    coordinates into projected coordinates using a number of different cartographic
+    projections. Over the years, as the need has become apparent, support for datum
+    shifts has slowly worked its way into PROJ as well. Today PROJ supports more
+    than a hundred different map projections and can transform coordinates between
+    datums using all but the most obscure geodetic techniques.
 
+    You can download the source code for PROJ on the :ref:`download section<download>`
+    and find links to prepackaged executables in the
+    :ref:`installation section<install>`.
+
+    In addition to this website the PROJ documentation is also available in `PDF`_
+    form.
+
+.. _`PDF`: https://raw.githubusercontent.com/OSGeo/proj.4/gh-pages/proj.pdf

@@ -16,30 +16,30 @@ The projection is conformal which makes it suitable for navigational purposes.
 +---------------------+----------------------------------------------------------+
 | **Defined area**    | Global, but best used near the equator                   |
 +---------------------+----------------------------------------------------------+
-| **Implemented by**  | Gerald I. Evenden                                        |
+| **Alias**           | merc                                                     |
 +---------------------+----------------------------------------------------------+
-| **Options**                                                                    |
+| **Domain**          | 2D                                                       |
 +---------------------+----------------------------------------------------------+
-| `+lat_ts`           | Latitude of true scale. Defaults to 0.0                  |
+| **Input type**      | Geodetic coordinates                                     |
 +---------------------+----------------------------------------------------------+
-| `+k_0`              | Scaling factor. Defaults to 1.0                          |
+| **Output type**     | Projected coordinates                                    |
 +---------------------+----------------------------------------------------------+
 
-
-
-.. image:: ./images/merc.png
-   :scale: 50%
+.. figure:: ./images/merc.png
+   :width: 500 px
+   :align: center
    :alt:   Mercator
 
+   proj-string: ``+proj=merc``
 
 Usage
 ########
 
 Applications should be limited to equatorial regions, but is frequently
-used for navigational charts with latitude of true scale (``+lat_ts``) specified within
+used for navigational charts with latitude of true scale (:option:`+lat_ts`) specified within
 or near chart's boundaries.
 Often inappropriately used for world maps since the regions near the poles
-cannot be shown [Evenden1995]_.
+cannot be shown :cite:`Evenden1995`.
 
 
 Example using latitude of true scale::
@@ -53,13 +53,32 @@ Example using scaling factor::
     12545706.61     2746073.80
 
 
-Note that ``+lat_ts`` and ``+k_0`` are mutually exclusive.
-If used together, ``+lat_ts`` takes precedence over ``+k_0``.
+Note that :option:`+lat_ts` and :option:`+k_0` are mutually exclusive.
+If used together, :option:`+lat_ts` takes precedence over :option:`+k_0`.
+
+Parameters
+################################################################################
+
+.. note:: All parameters for the projection are optional.
+
+.. include:: ../options/lat_ts.rst
+
+.. include:: ../options/k_0.rst
+
+.. include:: ../options/lon_0.rst
+
+.. include:: ../options/x_0.rst
+
+.. include:: ../options/y_0.rst
+
+.. include:: ../options/ellps.rst
+
+.. include:: ../options/R.rst
 
 Mathematical definition
 #######################
 
-The formulas describing the Mercator projection are all taken from G. Evenden's libproj manuals [Evenden2005]_.
+The formulas describing the Mercator projection are all taken from G. Evenden's libproj manuals :cite:`Evenden2005`.
 
 Spherical form
 **************
@@ -100,7 +119,7 @@ For the elliptical form of the projection we introduce the scaling factor:
 
 .. math::
 
-    k_0 = m\left( \phi_ts \right)
+    k_0 = m\left( \phi_{ts} \right)
 
 where :math:`m\left(\phi\right)` is the parallel radius at latitude :math:`\phi`.
 

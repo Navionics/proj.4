@@ -4,23 +4,49 @@
 Albers Equal Area
 ********************************************************************************
 +---------------------+----------------------------------------------------------+
-| **Classification**  | Conic.                                                   |
+| **Classification**  | Conic                                                    |
 +---------------------+----------------------------------------------------------+
-| **Available forms** | Forward and inverse, spherical and elliptical projection.|
+| **Available forms** | Forward and inverse, spherical and elliptical projection |
 +---------------------+----------------------------------------------------------+
-| **Defined area**    | Global.                                                  |
+| **Defined area**    | Global                                                   |
 +---------------------+----------------------------------------------------------+
+| **Alias**           | aea                                                      |
 +---------------------+----------------------------------------------------------+
-| **Options**                                                                    |
+| **Domain**          | 2D                                                       |
 +---------------------+----------------------------------------------------------+
-| `+lat_1`            | First standard parallel. Defaults to 0.0.                |
+| **Input type**      | Geodetic coordinates                                     |
 +---------------------+----------------------------------------------------------+
-| `+lat_2`            | Second standard parallel. Can not be equal to `lat_1`.   |
-|                     | Defaults to 0.0.                                         |
+| **Output type**     | Projected coordinates                                    |
 +---------------------+----------------------------------------------------------+
 
-.. image:: ./images/aea.png
-   :scale: 50%
+
+.. figure:: ./images/aea.png
+   :width: 500 px
+   :align: center
    :alt:   Albers Equal Area
 
+   proj-string: ``+proj=aea +lat_1=29.5 +lat_2=42.5``
+
+Options
+################################################################################
+
+Required
+--------------------------------------------------------------------------------
+
+.. include:: ../options/lat_1.rst
+
+.. include:: ../options/lat_2.rst
+
+Optional
+--------------------------------------------------------------------------------
+
+.. include:: ../options/lon_0.rst
+
+.. include:: ../options/ellps.rst
+
+.. include:: ../options/R.rst
+
+.. include:: ../options/x_0.rst
+
+.. include:: ../options/y_0.rst
 

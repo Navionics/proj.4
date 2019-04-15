@@ -4,10 +4,12 @@
 Eckert IV
 ********************************************************************************
 
-.. image:: ./images/eck4.png
-   :scale: 50%
+.. figure:: ./images/eck4.png
+   :width: 500 px
+   :align: center
    :alt:   Eckert IV
 
+   proj-string: ``+proj=eck4``
 
 .. math::
 
@@ -16,4 +18,15 @@ Eckert IV
 .. math::
     y = 2 \phi / \sqrt { 2 + \pi }
 
+Parameters
+################################################################################
 
+.. note:: All parameters are optional for the Eckert IV projection.
+
+.. include:: ../options/lon_0.rst
+
+.. include:: ../options/R.rst
+
+.. include:: ../options/x_0.rst
+
+.. include:: ../options/y_0.rst

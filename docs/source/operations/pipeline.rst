@@ -4,18 +4,18 @@
 The pipeline operator
 ================================================================================
 
+.. versionadded:: 5.0.0
+
 Construct complex operations by daisy-chaining operations in a sequential pipeline.
 
 +-----------------+--------------------------------------------------------------------+
-| **Input type**  | Any.                                                               |
+| **Alias**       | pipeline                                                           |
 +-----------------+--------------------------------------------------------------------+
-| **Output type** | Any.                                                               |
+| **Domain**      | 2D, 3D and 4D                                                      |
 +-----------------+--------------------------------------------------------------------+
-| **Options**                                                                          |
+| **Input type**  | Any                                                                |
 +-----------------+--------------------------------------------------------------------+
-| `step`          | Separate each step in a pipeline.                                  |
-+-----------------+--------------------------------------------------------------------+
-| `inv`           | Invert a step in a pipeline.                                       |
+| **Output type** | Any                                                                |
 +-----------------+--------------------------------------------------------------------+
 
 .. note:: See the section on :ref:`transformation` for a more thorough introduction
@@ -83,6 +83,8 @@ does not.
 
 Will result in an error since :ref:`urm5` does not have an inverse operation defined.
 
+.. _global-pipeline-parameter:
+
 **4. Parameters added before the first `+step` are global and will be applied to all steps.**
 
 In the following the GRS80 ellipsoid will be applied to all steps.
@@ -109,3 +111,20 @@ pass an operation that outputs projected coordinates to an operation that expect
     +step +proj=merc  # Mercator outputs projected coordinates
     +step +proj=robin # The Robinson projection expects angular input
 
+Parameters
+-------------------------------------------------------------------------------
+
+Required
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. option:: +step
+
+    Separate each step in a pipeline.
+
+
+Optional
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. option:: +inv
+
+    Invert a step in a pipeline.

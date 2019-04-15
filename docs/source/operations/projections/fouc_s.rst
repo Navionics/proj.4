@@ -4,9 +4,12 @@
 Foucaut Sinusoidal
 ********************************************************************************
 
-.. image:: ./images/fouc_s.png
-   :scale: 50%
+.. figure:: ./images/fouc_s.png
+   :width: 500 px
+   :align: center
    :alt:   Foucaut Sinusoidal
+
+   proj-string: ``+proj=fouc_s``
 
 
 The `y`-axis is based upon a weighted mean of the cylindrical equal-area and
@@ -23,3 +26,21 @@ For the inverse, the Newton-Raphson method can be used to determine
 :math:`\phi` from the equation for :math:`y` above. As :math:`n \rightarrow 0` and
 :math:`\phi \rightarrow \pi/2`, convergence is slow but for :math:`n = 0`, :math:`\phi =
 \sin^1y`
+
+
+Parameters
+################################################################################
+
+.. note:: All parameters are optional for the Foucaut Sinusoidal projection.
+
+.. option:: +n=<value>
+
+    Weighting factor. Value should be in the interval 0-1.
+
+.. include:: ../options/lon_0.rst
+
+.. include:: ../options/R.rst
+
+.. include:: ../options/x_0.rst
+
+.. include:: ../options/y_0.rst

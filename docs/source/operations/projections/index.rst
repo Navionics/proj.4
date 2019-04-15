@@ -20,6 +20,7 @@ Projections map the spherical 3D space to a flat 2D space.
    apian
    august
    bacon
+   bertin1953
    bipc
    boggs
    bonne
@@ -30,6 +31,7 @@ Projections map the spherical 3D space to a flat 2D space.
    cea
    chamb
    collg
+   comill
    crast
    denoy
    eck1
@@ -40,8 +42,8 @@ Projections map the spherical 3D space to a flat 2D space.
    eck6
    eqc
    eqdc
+   eqearth
    euler
-   etmerc
    fahey
    fouc
    fouc_s
@@ -82,11 +84,13 @@ Projections map the spherical 3D space to a flat 2D space.
    merc
    mil_os
    mill
+   misrsom
    moll
    murd1
    murd2
    murd3
    natearth
+   natearth2
    nell
    nell_h
    nicol
@@ -98,6 +102,7 @@ Projections map the spherical 3D space to a flat 2D space.
    omerc
    ortel
    ortho
+   patterson
    pconic
    poly
    putp1
@@ -114,6 +119,7 @@ Projections map the spherical 3D space to a flat 2D space.
    robin
    rouss
    rpoly
+   sch
    sinu
    somerc
    stere
@@ -121,8 +127,10 @@ Projections map the spherical 3D space to a flat 2D space.
    gstmerc
    tcc
    tcea
+   times
    tissot
    tmerc
+   tobmerc
    tpeqd
    tpers
    ups

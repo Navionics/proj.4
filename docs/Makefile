@@ -2,7 +2,7 @@
 #
 
 # You can set these variables from the command line.
-SPHINXOPTS    =
+SPHINXOPTS    = -W
 SPHINXBUILD   = sphinx-build
 PAPER         =
 BUILDDIR      = build
@@ -50,10 +50,21 @@ help:
 .PHONY: clean
 clean:
 	rm -rf $(BUILDDIR)/*
+	rm -rf .doxygen_up_to_date
+
+.doxygen_up_to_date: ../Doxyfile ../src/*.cpp ../include/proj/*.hpp
+	../scripts/doxygen.sh
+	touch .doxygen_up_to_date
 
 .PHONY: html
-html:
+html: .doxygen_up_to_date
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
+	# Undoes the hack done in scripts/doxygen.sh
+	@sed "s/io::Convention_/io::Convention/g" < $(BUILDDIR)/html/development/reference/cpp/io.html | sed "s/>Convention_/>Convention/g" | sed "s/_WKT2/WKT2/g" | sed "s/_WKT1/WKT1/g" > $(BUILDDIR)/html/development/reference/cpp/io.html.tmp
+	@mv $(BUILDDIR)/html/development/reference/cpp/io.html.tmp $(BUILDDIR)/html/development/reference/cpp/io.html
+	# Undoes the hacks of scripts/generate_breathe_friendly_general_doc.py
+	@sed "s/<em class=\"property\">namespace <\/em>//g" < $(BUILDDIR)/html/development/reference/cpp/cpp_general.html > $(BUILDDIR)/html/development/reference/cpp/cpp_general.html.tmp
+	@mv $(BUILDDIR)/html/development/reference/cpp/cpp_general.html.tmp $(BUILDDIR)/html/development/reference/cpp/cpp_general.html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 
@@ -94,9 +105,9 @@ qthelp:
 	@echo
 	@echo "Build finished; now you can run "qcollectiongenerator" with the" \
 	      ".qhcp project file in $(BUILDDIR)/qthelp, like this:"
-	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/proj4.qhcp"
+	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/proj.qhcp"
 	@echo "To view the help file:"
-	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/proj4.qhc"
+	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/proj.qhc"
 
 .PHONY: applehelp
 applehelp:
@@ -113,8 +124,8 @@ devhelp:
 	@echo
 	@echo "Build finished."
 	@echo "To view the help file:"
-	@echo "# mkdir -p $$HOME/.local/share/devhelp/proj4"
-	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/proj4"
+	@echo "# mkdir -p $$HOME/.local/share/devhelp/proj"
+	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/proj"
 	@echo "# devhelp"
 
 .PHONY: epub

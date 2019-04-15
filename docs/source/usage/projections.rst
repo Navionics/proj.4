@@ -26,7 +26,6 @@ documenting the individual :doc:`projections<../operations/projections/index>`.
     +lat_0       Latitude of origin
     +lon_0       Central meridian
     +lon_wrap    Center longitude to use for wrapping (see below)
-    +no_defs     Don't use the /usr/share/proj/proj_def.dat defaults file
     +over        Allow longitude output outside -180 to 180 range, disables
                  wrapping (see below)
     +pm          Alternate prime meridian (typically a city name, see below)
@@ -129,8 +128,8 @@ meridian.
 ::
 
     cs2cs +proj=latlong +datum=WGS84 +to +proj=latlong +datum=WGS84 +pm=madrid
-    0 0                           <i>(input)</i>
-    3d41'16.48"E    0dN 0.000     <i>(output)</i>
+    0 0
+    3d41'16.48"E    0dN 0.000
 
 
 Axis orientation

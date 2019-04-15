@@ -11,26 +11,19 @@ if(WIN32)
 endif()
 if(UNIX)
   set(DEFAULT_PROJ_ROOT_DIR "/usr/local/")
-endif(UNIX)
+endif()
 
 
-IF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-	SET(CMAKE_INSTALL_PREFIX ${DEFAULT_PROJ_ROOT_DIR} CACHE PATH
-		"Proj install prefix" FORCE)
-ENDIF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  set(CMAKE_INSTALL_PREFIX ${DEFAULT_PROJ_ROOT_DIR}
+    CACHE PATH "Proj install prefix" FORCE)
+endif()
 
 #TODO
 # for data install testing the PROJ_LIB envVar
 
 string(TOLOWER "${PROJECT_NAME}" PROJECT_NAME_LOWER)
-if(WIN32)
-  set(DEFAULT_BIN_SUBDIR bin)
-  set(DEFAULT_LIB_SUBDIR local/lib)
-  set(DEFAULT_DATA_SUBDIR share)
-  set(DEFAULT_INCLUDE_SUBDIR local/include)
-  set(DEFAULT_DOC_SUBDIR share/doc/proj)
-  set(DEFAULT_CMAKE_SUBDIR local/lib/cmake/${PROJECT_NAME_LOWER})
-elseif(UNIX)
+if(UNIX)
   include(GNUInstallDirs)
   set(DEFAULT_BIN_SUBDIR ${CMAKE_INSTALL_BINDIR})
   set(DEFAULT_LIB_SUBDIR ${CMAKE_INSTALL_LIBDIR})
@@ -39,7 +32,7 @@ elseif(UNIX)
   set(DEFAULT_DOC_SUBDIR ${CMAKE_INSTALL_DOCDIR})
   set(DEFAULT_CMAKE_SUBDIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME_LOWER})
 else()
-  # Common locatoins for Unix and Mac OS X
+  # Common locations for Unix and Mac OS X
   set(DEFAULT_BIN_SUBDIR bin)
   set(DEFAULT_LIB_SUBDIR lib)
   set(DEFAULT_DATA_SUBDIR share/proj)
@@ -65,13 +58,15 @@ set(PROJ_CMAKE_SUBDIR ${DEFAULT_CMAKE_SUBDIR} CACHE STRING
   "Subdirectory where cmake proj-config file will be installed")
 
 # Mark *DIR variables as advanced and dedicated to use by power-users only.
-mark_as_advanced(PROJ_ROOT_DIR
-                 PROJ_BIN_SUBDIR
-                 PROJ_LIB_SUBDIR
-                 PROJ_INCLUDE_SUBDIR
-                 PROJ_DATA_SUBDIR
-                 PROJ_DOC_SUBDIR
-                 PROJ_CMAKE_SUBDIR )
+mark_as_advanced(
+  PROJ_ROOT_DIR
+  PROJ_BIN_SUBDIR
+  PROJ_LIB_SUBDIR
+  PROJ_INCLUDE_SUBDIR
+  PROJ_DATA_SUBDIR
+  PROJ_DOC_SUBDIR
+  PROJ_CMAKE_SUBDIR
+)
 
 set(DEFAULT_BINDIR "${PROJ_BIN_SUBDIR}")
 set(DEFAULT_LIBDIR "${PROJ_LIB_SUBDIR}")
@@ -79,5 +74,3 @@ set(DEFAULT_DATADIR "${PROJ_DATA_SUBDIR}")
 set(DEFAULT_DOCDIR "${PROJ_DOC_SUBDIR}")
 set(DEFAULT_INCLUDEDIR "${PROJ_INCLUDE_SUBDIR}")
 set(DEFAULT_CMAKEDIR "${PROJ_CMAKE_SUBDIR}")
-
-

@@ -1,8 +1,10 @@
 # PROJ
 
-[![Travis Status](https://travis-ci.org/OSGeo/proj.4.svg?branch=master)](https://travis-ci.org/OSGeo/proj.4)
+[![Travis Status](https://travis-ci.com/OSGeo/proj.4.svg?branch=master)](https://travis-ci.com/OSGeo/proj.4)
 [![AppVeyor Status](https://ci.appveyor.com/api/projects/status/584j49uguwoo5evi?svg=true)](https://ci.appveyor.com/project/OSGeo/proj-4)
 [![Coveralls Status](https://coveralls.io/repos/github/OSGeo/proj.4/badge.svg?branch=master)](https://coveralls.io/github/OSGeo/proj.4?branch=master)
+[![Gitter](https://badges.gitter.im/OSGeo/proj.4.svg)](https://gitter.im/OSGeo/proj.4)
+[![Mailing List](https://img.shields.io/badge/PROJ-mailing%20list-4eb899.svg)](http://lists.maptools.org/mailman/listinfo/proj)
 
 PROJ is a generic coordinate transformation software, that transforms
 coordinates from one coordinate reference system (CRS) to another.
@@ -10,11 +12,11 @@ This includes cartographic projections as well as geodetic transformations.
 
 For more information on the PROJ.4 project please see the web page at:
 
-http://proj4.org/
+https://proj4.org/
 
 The PROJ.4 mailing list can be found at:
 
-http://lists.maptools.org/mailman/listinfo/proj
+https://lists.osgeo.org/mailman/listinfo/proj/
 
 See the NEWS file for changes between versions.
 
@@ -25,9 +27,14 @@ The following command line utilities are included in the PROJ package:
 - geod, for geodesic (great circle) computations.
 - cct, for generic Coordinate Conversions and Transformations.
 - gie, the Geospatial Integrity Investigation Environment.
-
+- projinfo, for geodetic object and coordinate operation queries
 
 ## Installation
+### Build dependencies
+
+PROJ requires C and C++11 compilers.
+It also requires SQLite3 (headers, library and executable).
+
 ### Building with CMake
 
     cd proj
@@ -39,6 +46,11 @@ The following command line utilities are included in the PROJ package:
 On Windows, one may need to specify generator:
 
     cmake -G "Visual Studio 15 2017" ..
+
+If the SQLite3 dependency is installed in a custom location, specify the
+paths to the include directory and the library:
+
+    cmake -DSQLITE3_INCLUDE_DIR=/opt/SQLite/include -DSQLITE3_LIBRARY=/opt/SQLite/lib/libsqlite3.so ..
 
 Tests are run with
 
@@ -88,32 +100,6 @@ If you are building from the git repository you have to first run
     ./autogen.sh
 
 which will generate a configure script that can be used as described above.
-
-### Building on Windows with NMAKE
-
-PROJ can be built with Microsoft Visual C/C++ using the `makefile.vc`
-in the `PROJ` directory.  First edit the `PROJ\nmake.opt` and
-modify the `INSTDIR` value at the top to point to the directory
-where the PROJ tree shall be installed.
-If you want to install into `C:\PROJ`, it can remain unchanged.
-Then use the `makefile.vc` to build the software e.g.:
-
-    C:\> cd proj
-    C:\PROJ> nmake /f makefile.vc
-    C:\PROJ> nmake /f makefile.vc install-all
-
-Note that you have to have the VC++ environment variables, and path
-setup properly.  This may involve running the `VCVARS32.BAT`
-script out of the Visual C++ tree.
-
-The `makefile.vc` builds `proj.exe`, `proj.dll` and `proj.lib`.
-
-On Windows you have to set the `PROJ_LIB` environment variable to make
-sure that PROJ can find the resource files that it needs. For the
-default install directory you can set `PROJ_LIB` with:
-
-    C:\> set PROJ_LIB=C:\PROJ\share
-
 
 ### Distribution files and format
 

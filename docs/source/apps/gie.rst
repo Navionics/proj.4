@@ -8,7 +8,7 @@ gie
 
 .. only:: html
 
-       The Geospatial Integrity Investigation Environment
+    The Geospatial Integrity Investigation Environment
 
 Synopsis
 ********
@@ -34,13 +34,13 @@ already employed for compiling the library.
 
 .. option:: -v, --verbose
 
-    Verbose: Provide non-essential informational output.  Repeat :option:`-v` for
+    Verbose: Provide non-essential informational output. Repeat :option:`-v` for
     more verbosity (e.g. ``-vv``)
 
 .. option:: -q, --quiet
 
-    Quiet: Opposite of verbose. In  quiet  mode  not  even  errors  are
-    reported.  Only  interaction  is through the return code (0 on success,
+    Quiet: Opposite of verbose. In quiet mode not even errors are
+    reported. Only interaction is through the return code (0 on success,
     non-zero indicates number of FAILED tests)
 
 .. option:: -l, --list
@@ -75,7 +75,7 @@ like:
 
     </gie>
 
-Parsing of a  :program:`gie` file starts at ``<gie>`` and ends when ``</gie>``
+Parsing of a :program:`gie` file starts at ``<gie>`` and ends when ``</gie>``
 is reached. Anything before ``<gie>`` and after ``</gie>`` is not considered.
 Test cases are created by defining an :option:`operation` which
 :option:`accept` an input coordinate and :option:`expect` an output
@@ -142,8 +142,8 @@ gie command language
     accepted for one :option:`operation`. For each :option:`accept` an
     accompanying :option:`expect` is needed.
 
-    Note that :program:`gie` accepts the underscore ("_") as a thousands
-    separator.  It is not required (in fact, it is entirely ignored by the
+    Note that :program:`gie` accepts the underscore (``_``) as a thousands
+    separator. It is not required (in fact, it is entirely ignored by the
     input routine), but it significantly improves the readability of the very
     long strings of numbers typically required in projected coordinates.
 
@@ -163,7 +163,7 @@ gie command language
     In addition to expecting a coordinate it is also possible to expect a
     PROJ error code in case an operation can't be created. This is useful when
     testing that errors are caught and handled correctly. Below is an example of
-    that tests that the pipeline operator fails correctly when a non-invertable
+    that tests that the pipeline operator fails correctly when a non-invertible
     pipeline is constructed.
 
     .. code-block:: console
@@ -172,14 +172,14 @@ gie command language
                     proj=urm5 n=0.5 inv
         expect      failure pjd_err_malformed_pipeline
 
-    See ``gie -l`` for a list of error codes that can be expected.
+    See :option:`gie --list<--list>` for a list of error codes that can be expected.
 
 .. option:: tolerance <tolerance>
 
     The :option:`tolerance` command controls how much accepted coordinates
     can deviate from the expected coordinate. This is handy to test that an
     operation meets a certain numerical tolerance threshold. Some operations
-    are expexted to be accurate within milimeters  where others might only be
+    are expected to be accurate within millimeters where others might only be
     accurate within a few meters. :option:`tolerance` should
 
     .. code-block:: console
@@ -207,17 +207,32 @@ gie command language
     to function. The accepted coordinate is passed to the operation first in
     it's forward mode, then the output from the forward operation is passed
     back to the inverse operation. This procedure is done ``n`` times. If the
-    resulting coordinate is within the set tolerance of the initial coordinate
+    resulting coordinate is within the set tolerance of the initial coordinate,
     the test is passed.
 
-    Example:
+    Example with the default 100 iterations and the default tolerance:
+
+    .. code-block:: console
+
+        operation       proj=merc
+        accept          12 55
+        roundtrip
+
+    Example with count and default tolerance:
+
+    .. code-block:: console
+
+        operation       proj=merc
+        accept          12 55
+        roundtrip       10000
+
+    Example with count and tolerance:
 
     .. code-block:: console
 
         operation       proj=merc
         accept          12 55
         roundtrip       10000 5 mm
-
 
 .. option:: direction <direction>
 
@@ -251,14 +266,22 @@ gie command language
 
     .. code-block:: console
 
-        operation  proj=hgridshift +grids=nzgd2kgrid0005.gsb  ellps=GRS80
+        operation proj=hgridshift +grids=nzgd2kgrid0005.gsb ellps=GRS80
         tolerance 1 mm
         ignore    pjd_err_failed_to_load_grid
         accept    172.999892181021551 -45.001620431954613
         expect    173                 -45
 
 
-    See ``gie -l`` for a list of error codes that can be ignored.
+    See :option:`gie --list<--list>` for a list of error codes that can be ignored.
+
+.. option:: require_grid <grid_name>
+
+    Checks the availability of the grid <grid_name>. If it is not found, then
+    all :option:`accept`/:option:`expect` pairs until the next
+    :option:`operation` will be skipped.
+    :option:`require_grid` can be repeated several times to specify several grids whose
+    presence is required.
 
 .. option:: echo <text>
 
@@ -286,7 +309,7 @@ gie command language
 
 .. option:: skip
 
-    Skip any test after the first occurence of :option:`skip`. In the example below only
+    Skip any test after the first occurrence of :option:`skip`. In the example below only
     the first test will be performed. The second test is skipped. This feature is mostly
     relevant for debugging when writing new test cases.
 
@@ -307,12 +330,12 @@ Background
 More importantly than being an acronym for "Geospatial Integrity Investigation
 Environment", gie were also the initials, user id, and USGS email address of
 Gerald Ian Evenden (1935--2016), the geospatial visionary, who, already in the
-1980s, started what was  to  become  the PROJ of today.
+1980s, started what was to become the PROJ of today.
 
 Gerald's clear vision was that map projections are *just special functions*.
 Some of them rather complex, most of them of two variables, but all of them
 *just special functions*, and not particularly more special than the :c:func:`sin()`,
-:c:func:`cos()`, :c:func:`tan()`, and :c:func:`hypot()` already available  in  the  C standard library.
+:c:func:`cos()`, :c:func:`tan()`, and :c:func:`hypot()` already available in the C standard library.
 
 And hence, according to Gerald, *they should not be particularly much harder
 to use*, for a programmer, than the :c:func:`sin()`'s, :c:func:`tan()`'s and
@@ -322,7 +345,7 @@ Gerald's ingenuity also showed in the implementation of the vision, where
 he devised a comprehensive, yet simple, system of key-value pairs for
 parameterising a map projection, and the highly flexible :c:type:`PJ` struct, storing
 run-time compiled versions of those key-value pairs, hence making a map
-projection  function call, ``pj_fwd(PJ, point)``, as easy as a traditional function
+projection function call, ``pj_fwd(PJ, point)``, as easy as a traditional function
 call like ``hypot(x,y)``.
 
 While today, we may have more formally well defined metadata systems (most
@@ -348,10 +371,10 @@ So in honour, and hopefully also in the spirit, of Gerald Ian Evenden
     Bugs
     ****
 
-    A list of know bugs can be found at http://github.com/OSGeo/proj.4/issues
+    A list of know bugs can be found at https://github.com/OSGeo/proj.4/issues
     where new bug reports can be submitted to.
 
     Home page
     *********
 
-    http://proj4.org/
+    https://proj4.org/

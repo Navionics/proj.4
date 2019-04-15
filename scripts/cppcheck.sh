@@ -4,13 +4,28 @@
 
 LOG_FILE=/tmp/cppcheck_proj.txt
 
+SCRIPT_DIR=$(dirname "$0")
+case $SCRIPT_DIR in
+    "/"*)
+        ;;
+    ".")
+        SCRIPT_DIR=$(pwd)
+        ;;
+    *)
+        SCRIPT_DIR=$(pwd)/$(dirname "$0")
+        ;;
+esac
+
+TOPDIR="$SCRIPT_DIR/.."
+
 echo "" > ${LOG_FILE}
-for dirname in src; do
+for dirname in ${TOPDIR}/src; do
     echo "Running cppcheck on $dirname... (can be long)"
     if ! cppcheck --inline-suppr --template='{file}:{line},{severity},{id},{message}' \
         --enable=all --inconclusive --std=posix \
-        -DCPPCHECK \
-        $dirname \
+        -DCPPCHECK -D__cplusplus=201103L -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H \
+        -I${TOPDIR}/src -I${TOPDIR}/include \
+        "$dirname" \
         -j 8 >>${LOG_FILE} 2>&1 ; then
         echo "cppcheck failed"
         exit 1
@@ -19,7 +34,7 @@ done
 
 ret_code=0
 
-grep -v "unmatchedSuppression" ${LOG_FILE} > ${LOG_FILE}.tmp
+grep -v "unmatchedSuppression" ${LOG_FILE} | grep -v "nn.hpp" | grep -v "wkt1_generated_parser" | grep -v "wkt2_generated_parser" > ${LOG_FILE}.tmp
 mv ${LOG_FILE}.tmp ${LOG_FILE}
 
 if grep "null pointer" ${LOG_FILE} ; then

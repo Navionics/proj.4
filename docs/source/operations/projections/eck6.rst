@@ -4,7 +4,22 @@
 Eckert VI
 ********************************************************************************
 
-.. image:: ./images/eck6.png
-   :scale: 50%
-   :alt:   Eckert VI  
+.. figure:: ./images/eck6.png
+   :width: 500 px
+   :align: center
+   :alt:   Eckert VI
 
+   proj-string: ``+proj=eck6``
+
+Parameters
+################################################################################
+
+.. note:: All parameters are optional for the Eckert VI projection.
+
+.. include:: ../options/lon_0.rst
+
+.. include:: ../options/R.rst
+
+.. include:: ../options/x_0.rst
+
+.. include:: ../options/y_0.rst

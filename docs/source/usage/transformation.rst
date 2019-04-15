@@ -17,7 +17,7 @@ framework and the *transformation pipelines* framework. The first is the origina
 and limited, framework for doing geodetic transforms in PROJ The latter is a
 newer addition that aims to be a more complete transformation framework. Both are
 described in the sections below. Large portions of the text are based on
-[EversKnudsen2017]_.
+:cite:`EversKnudsen2017`.
 
 Before describing the details of the two frameworks, let us first remark that
 most cases of geodetic transformations can be expressed as a series of elementary
@@ -75,7 +75,7 @@ the introduction). In PROJ it can be implemented as
 
     proj=pipeline
     step proj=cart ellps=intl
-    step proj=helmert
+    step proj=helmert convention=coordinate_frame
          x=-81.0703  y=-89.3603  z=-115.7526
         rx=-0.48488 ry=-0.02436 rz=-0.41321  s=-0.540645
     step proj=cart inv ellps=GRS80
@@ -101,7 +101,7 @@ deprecated system with decimeter level tensions.
     step init=./s45b.pol:s45b_tc32
     step proj=utm inv ellps=intl zone=32
     step proj=cart ellps=intl
-    step proj=helmert
+    step proj=helmert convention=coordinate_frame
           x=-81.0703  y=-89.3603  z=-115.7526
          rx=-0.48488 ry=-0.02436 rz=-0.41321 s=-0.540645
     step proj=cart inv ellps=GRS80
@@ -115,27 +115,27 @@ ITRF2000 is defined. The temporal component is given as GPS weeks in the input
 data, but the 14-parameter Helmert transform expects temporal units in decimalyears.
 Hence the first step in the pipeline is the unitconvert pseudo-projection that makes
 sure the correct units are passed along to the Helmert transform.
-Most parameters of the Helmert transform are taken from [AltamimiEtAl2002]_,
-except the epoch which is the epoch of the transformation. The default setting is to
-use “coordinate frame” convention of the Helmert transform, but “position vector”
-convention can also be used. The last step in the pipeline is converting the
+Most parameters of the Helmert transform are taken from :cite:`Altamimi2002`,
+except the epoch which is the epoch of the transformation.
+The last step in the pipeline is converting the
 coordinate timestamps back to GPS weeks.
 
 ::
 
     proj=pipeline
     step proj=unitconvert t_in=gps_week t_out=decimalyear
-    step proj=helmert
+    step proj=helmert convention=coordinate_frame
          x=0.0127 y=0.0065 z=-0.0209 s=0.00195
          rx=0.00039 ry=-0.00080 rz=0.00114
          dx=-0.0029 dy=-0.0002 dz=-0.0006 ds=0.00001
          drx=0.00011 dry=0.00019 drz=-0.00007
-         epoch=1988.0
+         t_epoch=1988.0
     step proj=unitconvert t_in=decimalyear t_out=gps_week
 
 
 cs2cs paradigm
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+.. _cs2cs_specific_options:
 
     ============   ==============================================================
     Parameter      Description
@@ -210,8 +210,7 @@ at each grid location. Actually grid shifts are normally computed based on an
 interpolation between the containing four grid points.
 
 PROJ supports use of grid files for shifting between various reference frames.
-The grid shift table formats are ctable (the binary format produced by the PROJ
-``nad2bin`` program), NTv1 (the old Canadian format), and NTv2 (``.gsb`` - the new
+The grid shift table formats are ctable, NTv1 (the old Canadian format), and NTv2 (``.gsb`` - the new
 Canadian and Australian format).
 
 The text in this section is based on the *cs2cs* framework. Gridshifting is off
@@ -253,7 +252,7 @@ Skipping Missing Grids
 The special prefix ``@`` may be prefixed to a grid to make it optional.  If it
 not found, the search will continue to the next grid.  Normally any grid not
 found will cause an error.  For instance, the following would use the
-``ntv2_0.gsb`` file if available (see :ref:`nonfreegrids`), otherwise it would
+``ntv2_0.gsb`` file if available, otherwise it would
 fallback to using the ``ntv1_can.dat`` file.
 
 ::

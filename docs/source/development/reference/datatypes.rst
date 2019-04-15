@@ -60,11 +60,12 @@ Transformation objects
 
 .. c:type:: PJ_AREA
 
+    .. versionadded:: 6.0.0
+
     Opaque object describing an area in which a transformation is performed.
 
-    .. note:: This object is not fully implemented yet. It is to be used with
-              :c:func:`proj_create_crs_to_crs` to select the best transformation
-              between the two input coordinate reference systems.
+    It is used with :c:func:`proj_create_crs_to_crs` to select the best transformation
+    between the two input coordinate reference systems.
 
 2 dimensional coordinates
 --------------------------------------------------------------------------------
@@ -472,12 +473,12 @@ List structures
     .. code-block:: C
 
         struct PJ_OPERATIONS {
-            char    *id;                 /* operation keyword */
-            PJ *(*proj)(PJ *);           /* operation  entry point */
-            char    * const *descr;      /* description text */
+            const char  *id;            /* operation keyword */
+            PJ *(*proj)(PJ *);          /* operation  entry point */
+            char    * const *descr;     /* description text */
         };
 
-    .. c:member:: char *id
+    .. c:member:: const char *id
 
         Operation keyword.
 
@@ -497,25 +498,25 @@ List structures
     .. code-block:: C
 
         struct PJ_ELLPS {
-            char    *id;
-            char    *major;
-            char    *ell;
-            char    *name;
+            const char  *id;
+            const char  *major;
+            const char  *ell;
+            const char  *name;
         };
 
-    .. c:member:: char *id
+    .. c:member:: const char *id
 
         Keyword name of the ellipsoid.
 
-    .. c:member:: char *major
+    .. c:member:: const char *major
 
         Semi-major axis of the ellipsoid, or radius in case of a sphere.
 
-    .. c:member:: char *ell
+    .. c:member:: const char *ell
 
         Elliptical parameter, e.g. `rf=298.257` or `b=6356772.2`.
 
-    .. c:member:: char *name
+    .. c:member:: const char *name
 
         Name of the ellipsoid
 
@@ -526,21 +527,21 @@ List structures
     .. code-block:: C
 
         struct PJ_UNITS {
-            char    *id;           /* units keyword */
-            char    *to_meter;     /* multiply by value to get meters */
-            char    *name;         /* comments */
-            double   factor;       /* to_meter factor in actual numbers */
+            const char  *id;        /* units keyword */
+            const char  *to_meter;  /* multiply by value to get meters */
+            const char  *name;      /* comments */
+            double      factor;     /* to_meter factor in actual numbers */
         };
 
-    .. c:member:: char *id
+    .. c:member:: const char *id
 
         Keyword for the unit.
 
-    .. c:member:: char *to_meter
+    .. c:member:: const char *to_meter
 
         Text representation of the factor that converts a given unit to meters
 
-    .. c:member:: char *name
+    .. c:member:: const char *name
 
         Name of the unit.
 
@@ -555,15 +556,15 @@ List structures
     .. code-block:: C
 
         struct PJ_PRIME_MERIDIANS {
-            char    *id;
-            char    *defn;
+            const char  *id;
+            const char  *defn;
         };
 
-    .. c:member:: char *id
+    .. c:member:: const char *id
 
         Keyword for the prime meridian
 
-    .. c:member:: char *def
+    .. c:member:: const char *def
 
         Offset from Greenwich in DMS format.
 
@@ -794,3 +795,13 @@ Logging
 
 
     .. versionadded:: 5.1.0
+
+
+C API for ISO-19111 functionality
+-------------------------------------------------------------------------------
+
+.. doxygengroup:: iso19111_types
+   :project: cpp_stuff
+   :content-only:
+
+

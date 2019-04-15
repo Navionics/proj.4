@@ -13,21 +13,27 @@ Although the Cassini projection has been largely replaced by the Transverse Merc
 +---------------------+-------------------------------------------------------------------------+
 | **Defined area**    | Global, but best used near the central meridian with long, narrow areas |
 +---------------------+-------------------------------------------------------------------------+
-| **Implemented by**  | Gerald I. Evenden                                                       |
+| **Alias**           | cass                                                                    |
 +---------------------+-------------------------------------------------------------------------+
-| **Options**                                                                                   |
+| **Domain**          | 2D                                                                      |
 +---------------------+-------------------------------------------------------------------------+
-| `+lat_0`            | Latitude of origin (Default to 0)                                       |
+| **Input type**      | Geodetic coordinates                                                    |
++---------------------+-------------------------------------------------------------------------+
+| **Output type**     | Projected coordinates                                                   |
 +---------------------+-------------------------------------------------------------------------+
 
-.. image:: ./images/cass.png
-   :scale: 50%
+
+.. figure:: ./images/cass.png
+   :width: 500 px
+   :align: center
    :alt:   Cassini
+
+   proj-string: ``+proj=cass``
 
 Usage
 #####
 
-There has been little usage of the spherical version of the Cassini, but the ellipsoidal Cassini-Soldner version was adopted by the Ordnance Survey for the official survey of Great Britain during the second half of the 19th century [Steers1970]_.
+There has been little usage of the spherical version of the Cassini, but the ellipsoidal Cassini-Soldner version was adopted by the Ordnance Survey for the official survey of Great Britain during the second half of the 19th century :cite:`Steers1970`.
 Many of these maps were prepared at a scale of 1:2,500.
 The Cassini-Soldner was also used for the detailed mapping of many German states during the same period.
 
@@ -42,11 +48,29 @@ Example using EPSG 3068 (Soldner Berlin)::
     $ echo 13.5 52.4 | proj +proj=cass +lat_0=52.41864827777778 +lon_0=13.62720366666667 +x_0=40000 +y_0=10000 +ellps=bessel +datum=potsdam +units=m +no_defs
     31343.05	7932.76
 
+Options
+################################################################################
+
+.. note:: All options are optional for the Cassini projection.
+
+.. include:: ../options/lat_0.rst
+
+.. include:: ../options/lon_0.rst
+
+.. include:: ../options/x_0.rst
+
+.. include:: ../options/y_0.rst
+
+.. include:: ../options/ellps.rst
+
+.. include:: ../options/R.rst
+
+
 
 Mathematical definition
 #######################
 
-The formulas describing the Cassini projection are taken from Snyder's [Snyder1987]_.
+The formulas describing the Cassini projection are taken from :cite:`Snyder1987`.
 
 :math:`\phi_0` is the latitude of origin that match the center of the map (default to 0). It can be set with ``+lat_0``.
 
@@ -141,5 +165,4 @@ Further reading
 ###############
 
 #. `Wikipedia <https://en.wikipedia.org/wiki/Equirectangular_projection>`_
-#. [Snyder1987]_
 #. `EPSG, POSC literature pertaining to Coordinate Conversions and Transformations including Formulas  <http://www.ihsenergy.com/epsg/guid7.pdf>`_

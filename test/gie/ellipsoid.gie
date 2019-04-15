@@ -44,7 +44,7 @@ tolerance 10 nm
 accept    1 2
 expect    111319.4907932736  221194.0771604237
 
-accept    12 55
+accept    12 55s
 expect    1335833.8895192828  7326837.7148738774
 -------------------------------------------------------------------------------
 
@@ -57,16 +57,18 @@ expect    failure errno unknown_ellp_param
 operation proj=merc +a=-1
 expect    failure errno major_axis_not_given
 
-operation proj=merc no_defs
-expect    failure errno major_axis_not_given
-
-# This one should succeed due to ellps=WGS84 in proj_def.dat
 operation proj=merc
 accept    0 0
 expect    0 0
 
 operation proj=merc +es=-1
 expect    failure errno major_axis_not_given
+
+operation proj=merc +R=0
+expect    failure errno major_axis_not_given
+
+operation +proj=merc +R_a +a=2 +f=2
+expect  failure errno major_axis_not_given
 
 operation
 expect    failure
@@ -132,11 +134,23 @@ Shape parameters
 operation  proj=utm zone=32   ellps=GRS80 rf=0
 expect     failure errno rev_flattening_is_zero
 
+operation  proj=utm zone=32   ellps=GRS80 e=-0.5
+expect     failure errno invalid_eccentricity
+
+operation  proj=utm zone=32   ellps=GRS80 e=1
+expect     failure errno invalid_eccentricity
+
 operation  proj=utm zone=32   ellps=GRS80 es=1
-expect     failure errno eccentricity_is_one
+expect     failure errno invalid_eccentricity
+
+operation  proj=utm zone=32   a=1 es=1.1
+expect     failure errno invalid_eccentricity
 
 operation  proj=utm zone=32   ellps=GRS80 b=0
-expect     failure errno eccentricity_is_one
+expect     failure errno invalid_eccentricity
+
+operation  proj=utm zone=32   ellps=GRS80 f=1
+expect     failure errno invalid_eccentricity
 
 operation  proj=utm zone=32   ellps=GRS80 b=6000000
 accept     12 55
@@ -158,5 +172,15 @@ operation  proj=utm zone=32   a=6400000 b=6000000
 accept     12 55
 expect     700416.5900   5669475.8884
 -------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+Test that flattening can be set to zero
+-------------------------------------------------------------------------------
+operation  proj=merc +a=1.0 +f=0.0
+-------------------------------------------------------------------------------
+accept     12       56
+expect     0.20944  1.18505
+-------------------------------------------------------------------------------
+
 
 </gie>

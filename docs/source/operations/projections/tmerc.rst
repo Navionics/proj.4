@@ -6,26 +6,31 @@ Transverse Mercator
 
 The transverse Mercator projection in its various forms is the most widely used projected coordinate system for world topographical and offshore mapping.
 
-+---------------------+--------------------------------------------------------------------------------+
-| **Classification**  | Transverse and oblique cylindrical                                             |
-+---------------------+--------------------------------------------------------------------------------+
-| **Available forms** | Forward and inverse, Spherical and Elliptical                                  |
-+---------------------+--------------------------------------------------------------------------------+
-| **Defined area**    | Global, but reasonably accurate only within 15 degrees of the central meridian |
-+---------------------+--------------------------------------------------------------------------------+
-| **Implemented by**  | Gerald I. Evenden                                                              |
-+---------------------+--------------------------------------------------------------------------------+
-| **Options**                                                                                          |
-+---------------------+--------------------------------------------------------------------------------+
-| `+lat_0`            | Latitude of origin (Default to 0)                                              |
-+---------------------+--------------------------------------------------------------------------------+
-| `+k0`               | Scale factor at natural origin (Default to 1)                                  |
-+---------------------+--------------------------------------------------------------------------------+
++---------------------+----------------------------------------------------------+
+| **Classification**  | Transverse and oblique cylindrical                       |
++---------------------+----------------------------------------------------------+
+| **Available forms** | Forward and inverse, Spherical and Elliptical            |
++---------------------+----------------------------------------------------------+
+| **Defined area**    | Global, but reasonably accurate only within 15 degrees   |
+|                     | of the central meridian                                  |
++---------------------+----------------------------------------------------------+
+| **Alias**           | tmerc                                                    |
++---------------------+----------------------------------------------------------+
+| **Domain**          | 2D                                                       |
++---------------------+----------------------------------------------------------+
+| **Input type**      | Geodetic coordinates                                     |
++---------------------+----------------------------------------------------------+
+| **Output type**     | Projected coordinates                                    |
++---------------------+----------------------------------------------------------+
 
 
-.. image:: ./images/tmerc.png
-   :scale: 50%
-   :alt:   Transverse Mercator  
+
+.. figure:: ./images/tmerc.png
+   :width: 500 px
+   :align: center
+   :alt:   Transverse Mercator
+
+   proj-string: ``+proj=tmerc``
 
 Usage
 #####
@@ -39,7 +44,7 @@ The following table gives special cases of the Transverse Mercator projection.
 
 +-------------------------------------+-----------------------------------------------------+--------------------------------+------------------------------------------+--------------+
 | Projection Name                     | Areas                                               | Central meridian               | Zone width                               | Scale Factor |
-+-------------------------------------+-----------------------------------------------------+--------------------------------+------------------------------------------+--------------+
++=====================================+=====================================================+================================+==========================================+==============+
 | Transverse Mercator                 | World wide                                          | Various                        | less than 6°                             | Various      |
 +-------------------------------------+-----------------------------------------------------+--------------------------------+------------------------------------------+--------------+
 | Transverse Mercator south oriented  | Southern Africa                                     | 2° intervals E of 11°E         | 2°                                       | 1.000        |
@@ -57,18 +62,45 @@ The following table gives special cases of the Transverse Mercator projection.
 
 Example using Gauss-Kruger on Germany area (aka EPSG:31467) ::
 
-    $ echo 9 51 | proj +proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs
+    $ echo 9 51 | proj +proj=tmerc +lat_0=0 +lon_0=9 +k_0=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs
     3500000.00	5651505.56
 
 Example using Gauss Boaga on Italy area (EPSG:3004) ::
 
-    $ echo 15 42 | proj +proj=tmerc +lat_0=0 +lon_0=15 +k=0.9996 +x_0=2520000 +y_0=0 +ellps=intl +units=m +no_defs
-    2520000.00	4649858.60 
+    $ echo 15 42 | proj +proj=tmerc +lat_0=0 +lon_0=15 +k_0=0.9996 +x_0=2520000 +y_0=0 +ellps=intl +units=m +no_defs
+    2520000.00	4649858.60
+
+Parameters
+################################################################################
+
+.. note:: All parameters for the projection are optional.
+
+.. option:: +approx
+
+    .. versionadded:: 6.0.0
+
+    Use the algorithm described in section "Elliptical Form" below.
+    It is faster than the default algorithm, but also diverges faster
+    as the distance from the central meridian increases.
+
+.. include:: ../options/lon_0.rst
+
+.. include:: ../options/lat_0.rst
+
+.. include:: ../options/ellps.rst
+
+.. include:: ../options/R.rst
+
+.. include:: ../options/k_0.rst
+
+.. include:: ../options/x_0.rst
+
+.. include:: ../options/y_0.rst
 
 Mathematical definition
 #######################
 
-The formulas describing the Transverse Mercator are all taken from Evenden's [Evenden2005]_.
+The formulas describing the Transverse Mercator below are quoted from Evenden's [Evenden2005]_.
 
 :math:`\phi_0` is the latitude of origin that match the center of the map. It can be set with ``+lat_0``.
 
@@ -118,6 +150,11 @@ Inverse projection
 Elliptical form
 ***************
 
+The formulas below describe the algorithm used when giving the
+:option:`+approx` option. They are originally from :cite:`Snyder1987`,
+but here quoted from :cite:`Evenden1995`.
+The default algorithm is given by Poder and Engsager in :cite:`Poder1998`
+
 Forward projection
 ==================
 
@@ -139,7 +176,7 @@ Forward projection
 
 .. math::
 
-  x &= k_0 \lambda \cos \phi \\ 
+  x &= k_0 \lambda \cos \phi \\
     &+ \frac{k_0 \lambda^3 \cos^3\phi}{3!}(1-t^2+\eta^2) \\
     &+ \frac{k_0 \lambda^5 \cos^5\phi}{5!}(5-18t^2+t^4+14\eta^2-58t^2\eta^2) \\
     &+\frac{k_0 \lambda^7 \cos^7\phi}{7!}(61-479t^2+179t^4-t^6)

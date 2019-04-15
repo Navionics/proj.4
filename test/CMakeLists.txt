@@ -9,6 +9,7 @@ proj_add_gie_test("Ellipsoid" "gie/ellipsoid.gie")
 proj_add_gie_test("GDA" "gie/GDA.gie")
 proj_add_gie_test("4D-API-cs2cs-style" "gie/4D-API_cs2cs-style.gie")
 proj_add_gie_test("DHDN_ETRS89" "gie/DHDN_ETRS89.gie")
+proj_add_gie_test("Unitconvert" "gie/unitconvert.gie")
 
 # GIGS tests. Uncommented tests are expected to fail due to issues with
 # various projections. Should be investigated further and fixed.
@@ -16,7 +17,8 @@ proj_add_gie_test("GIGS-5101.1-jhs" "gigs/5101.1-jhs.gie")
 proj_add_gie_test("GIGS-5101.2-jhs" "gigs/5101.2-jhs.gie")
 proj_add_gie_test("GIGS-5101.3-jhs" "gigs/5101.3-jhs.gie")
 proj_add_gie_test("GIGS-5101.4-jhs-etmerc" "gigs/5101.4-jhs-etmerc.gie")
-#proj_add_gie_test("GIGS-5101.4-jhs" "gigs/5101.4-jhs.gie") # Same as above, but using etmerc instead of tmerc
+# Same as above, but using etmerc instead of tmerc
+#proj_add_gie_test("GIGS-5101.4-jhs" "gigs/5101.4-jhs.gie")
 proj_add_gie_test("GIGS-5102.1" "gigs/5102.1.gie")
 #proj_add_gie_test("GIGS-5102.2" "gigs/5102.2.gie")
 proj_add_gie_test("GIGS-5103.1" "gigs/5103.1.gie")
@@ -43,5 +45,14 @@ proj_add_gie_test("GIGS-5201" "gigs/5201.gie")
 #proj_add_gie_test("GIGS-5207.2" "gigs/5207.2.gie")
 proj_add_gie_test("GIGS-5208" "gigs/5208.gie")
 
+#SET(CATCH2_INCLUDE catch.hpp)
 
+#SET(TEST_MAIN_SRC test_main.cpp)
+#set(TEST_MAIN_LIBRARIES test_main)
+#add_library( ${TEST_MAIN_LIBRARIES}
+#                    ${PROJ_LIBRARY_TYPE}
+#                    ${TEST_MAIN_SRC}
+#                    ${CATCH2_INCLUDE}  )
 
+add_subdirectory(cli)
+add_subdirectory(unit)

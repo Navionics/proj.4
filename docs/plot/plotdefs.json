@@ -6,7 +6,8 @@
         "lonmax": 180,
         "lonmin": -180,
         "name": "aea",
-        "projstring": "+proj=aea",
+        "#comment": "lat_1 and lat_2 values are previous defaults from now-removed proj_def.dat",
+        "projstring": "+proj=aea +lat_1=29.5 +lat_2=42.5",
         "res": "low",
         "type": "poly"
     },
@@ -84,6 +85,18 @@
         "lonmin": -180,
         "name": "bacon",
         "projstring": "+proj=bacon",
+        "res": "low",
+        "type": "poly"
+    },
+    {
+        "filename": "bertin1953.png",
+        "latmax": 90,
+        "latmin": -90,
+        "latmin": -60,
+        "lonmax": 180,
+        "lonmin": -180,
+        "name": "bertin1953",
+        "projstring": "+proj=bertin1953",
         "res": "low",
         "type": "poly"
     },
@@ -304,6 +317,17 @@
         "lonmin": -180,
         "name": "eqdc",
         "projstring": "+proj=eqdc +lat_1=55 +lat_2=60",
+        "res": "low",
+        "type": "poly"
+    },
+    {
+        "filename": "eqearth.png",
+        "latmax": 90,
+        "latmin": -90,
+        "lonmax": 180,
+        "lonmin": -180,
+        "name": "eqearth",
+        "projstring": "+proj=eqearth",
         "res": "low",
         "type": "poly"
     },
@@ -600,7 +624,8 @@
         "lonmax": -10,
         "lonmin": -160,
         "name": "lcc",
-        "projstring": "+proj=lcc +lon_0=-90",
+        "#comment": "lat_1 and lat_2 values are previous defaults from now-removed proj_def.dat",
+        "projstring": "+proj=lcc +lon_0=-90 +lat_1=33 +lat_2=45",
         "res": "med",
         "type": "poly"
     },
@@ -1210,6 +1235,17 @@
         "type": "line"
     },
     {
+        "filename": "times.png",
+        "latmax": 90,
+        "latmin": -90,
+        "lonmax": 180,
+        "lonmin": -180,
+        "name": "times",
+        "projstring": "+proj=times",
+        "res": "low",
+        "type": "poly"
+    },
+    {
         "filename": "tissot.png",
         "latmax": 90,
         "latmin": -90,
@@ -1228,6 +1264,17 @@
         "lonmin": -90,
         "name": "tmerc",
         "projstring": "+proj=tmerc",
+        "res": "low",
+        "type": "poly"
+    },
+    {
+        "filename": "tobmerc.png",
+        "latmax": 80,
+        "latmin": -80,
+        "lonmax": 180,
+        "lonmin": -180,
+        "name": "tobmerc",
+        "projstring": "+proj=tobmerc",
         "res": "low",
         "type": "poly"
     },

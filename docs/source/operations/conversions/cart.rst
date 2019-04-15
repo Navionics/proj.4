@@ -1,24 +1,38 @@
 .. _cart:
 
 ================================================================================
-Cartesian to geodetic conversion
+Geodetic to cartesian conversion
 ================================================================================
 
-Convert geodetic coordinates to cartesian coordinates.
+.. versionadded:: 5.0.0
 
-+--------------+--------------------------------------------------------------------+
-| **Options**                                                                       |
-+--------------+--------------------------------------------------------------------+
-| `+ellps`     |  Ellipsoid of the input coordinates. If used together with the     |
-|              |  ellipsoid parameters below, ``+ellps`` is overwritten.            |
-+--------------+--------------------------------------------------------------------+
-| `+a`         | Semi-major radius of ellipsoid axis.                               |
-+--------------+--------------------------------------------------------------------+
-| `+b`         | Semi-minor radius of ellipsoid axis.                               |
-+--------------+--------------------------------------------------------------------+
-| `+es`        | Eccentricity of ellipsoid.                                         |
-+--------------+--------------------------------------------------------------------+
-| `+f`         | Flattening of ellipsoid.                                           |
-+--------------+--------------------------------------------------------------------+
+Convert geodetic coordinates to cartesian coordinates (in the forward path).
 
++---------------------+--------------------------------------------------------+
+| **Alias**           | cart                                                   |
++---------------------+--------------------------------------------------------+
+| **Domain**          | 3D                                                     |
++---------------------+--------------------------------------------------------+
+| **Input type**      | Geodetic coordinates                                   |
++---------------------+--------------------------------------------------------+
+| **Output type**     | Geocentric cartesian coordinates                       |
++---------------------+--------------------------------------------------------+
 
+This conversion converts geodetic coordinate values (longitude, latitude,
+elevation above ellipsoid) to their geocentric (X, Y, Z) representation, where
+the first axis (X) points from the Earth centre to the point of longitude=0,
+latitude=0, the second axis (Y) points from the Earth centrer to the point of
+longitude=90, latitude=0 and the third axis (Z) points to the North pole.
+
+Usage
+################################################################################
+
+Convert geodetic coordinates to GRS80 cartesian coordinates::
+
+    echo 17.7562015132 45.3935192042 133.12 2017.8 | cct +proj=cart +ellps=GRS80
+    4272922.1553   1368283.0597  4518261.3501     2017.8000
+
+Parameters
+################################################################################
+
+.. include:: ../options/ellps.rst

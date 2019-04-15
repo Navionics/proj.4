@@ -22,15 +22,36 @@ Threading contexts
 Transformation setup
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+The objects returned by the functions defined in this section have minimal
+interaction with the the functions of the
+`C API for ISO-19111 functionality`_, and vice versa. See its introduction
+paragraph for more details.
+
 .. c:function:: PJ* proj_create(PJ_CONTEXT *ctx, const char *definition)
 
-    Create a transformation object from a proj-string.
+    Create a transformation object, or a CRS object, from a proj-string,
+    a WKT string, or object code (like "EPSG:4326", "urn:ogc:def:crs:EPSG::4326",
+    "urn:ogc:def:coordinateOperation:EPSG::1671").
 
     Example call:
 
     .. code-block:: C
 
         PJ *P = proj_create(0, "+proj=etmerc +lat_0=38 +lon_0=125 +ellps=bessel");
+
+    If a proj-string contains a +type=crs option, then it is interpreted as
+    a CRS definition. In particular geographic CRS are assumed to have axis
+    in the longitude, latitude order and with degree angular unit. The use
+    of proj-string to describe a CRS is discouraged. It is a legacy means of
+    conveying CRS descriptions: use of object codes (EPSG:XXXX typically) or
+    WKT description is recommended for better expressivity.
+
+    If a proj-string does not contain +type=crs, then it is interpreted as a
+    coordination operation / transformation.
+
+    If creation of the transformation object fails, the function returns `0` and
+    the PROJ error number is updated. The error number can be read with
+    :c:func:`proj_errno` or :c:func:`proj_context_errno`.
 
     The returned :c:type:`PJ`-pointer should be deallocated with :c:func:`proj_destroy`.
 
@@ -41,7 +62,7 @@ Transformation setup
 
 .. c:function:: PJ* proj_create_argv(PJ_CONTEXT *ctx, int argc, char **argv)
 
-    Create transformation object with argc/argv-style initialization. For this
+    Create a transformation object, or a CRS object, with argc/argv-style initialization. For this
     application each parameter in the defining proj-string is an entry in :c:data:`argv`.
 
     Example call:
@@ -51,6 +72,17 @@ Transformation setup
         char *args[3] = {"proj=utm", "zone=32", "ellps=GRS80"};
         PJ* P = proj_create_argv(0, 3, args);
 
+    If there is a type=crs argument, then the arguments are interpreted as
+    a CRS definition. In particular geographic CRS are assumed to have axis
+    in the longitude, latitude order and with degree angular unit.
+
+    If there is no type=crs argument, then it is interpreted as a
+    coordination operation / transformation.
+
+    If creation of the transformation object fails, the function returns `0` and
+    the PROJ error number is updated. The error number can be read with
+    :c:func:`proj_errno` or :c:func:`proj_context_errno`.
+
     The returned :c:type:`PJ`-pointer should be deallocated with :c:func:`proj_destroy`.
 
     :param PJ_CONTEXT* ctx: Threading context
@@ -58,36 +90,56 @@ Transformation setup
     :param char** argv: Vector of strings with proj-string parameters, e.g. ``+proj=merc``
     :returns: :c:type:`PJ*`
 
-.. c:function:: PJ* proj_create_crs_to_crs(PJ_CONTEXT *ctx, const char *srid_from, const char *srid_to, PJ_AREA *area)
+.. c:function:: PJ* proj_create_crs_to_crs(PJ_CONTEXT *ctx, const char *source_crs, const char *target_crs, PJ_AREA *area)
 
     Create a transformation object that is a pipeline between two known
     coordinate reference systems.
 
-    :c:data:`srid_from` and :c:data:`srid_to` should be the value part of a ``+init=...`` parameter
-    set, i.e. "epsg:25833" or "IGNF:AMST63". Any projection definition that
-    can be found in a init-file in :envvar:`PROJ_LIB` is a valid input to this function.
+    source_crs and target_crs can be :
 
-    For now the function mimics the cs2cs app: An input and an output CRS is
-    given and coordinates are transformed via a hub datum (WGS84). This
-    transformation strategy is referred to as "early-binding" by the EPSG. The
-    function can be extended to support "late-binding" transformations in the
-    future without affecting users of the function. When the function is extended
-    to the late-binding approach the :c:data:`area` argument will be used. For
-    now it is just a place-holder for a future improved implementation.
+        - a "AUTHORITY:CODE", like EPSG:25832. When using that syntax for a source
+          CRS, the created pipeline will expect that the values passed to :c:func:`proj_trans`
+          respect the axis order and axis unit of the official definition (
+          so for example, for EPSG:4326, with latitude first and longitude next,
+          in degrees). Similarly, when using that syntax for a target CRS, output
+          values will be emitted according to the official definition of this CRS.
+
+        - a PROJ string, like "+proj=longlat +datum=WGS84".
+          When using that syntax, the axis order and unit for geographic CRS will
+          be longitude, latitude, and the unit degrees.
+
+        - the name of a CRS as found in the PROJ database, e.g "WGS84", "NAD27", etc.
+
+        - more generally any string accepted by :c:func:`proj_create`
+
+    An "area of use" can be specified in area. When it is supplied, the more
+    accurate transformation between two given systems can be chosen.
+
+    When no area of use is specific and several coordinate operations are possible
+    depending on the area of use, this function will internally store those
+    candidate coordinate operations in the return PJ object. Each subsequent
+    coordinate transformation done with :c:func:`proj_trans` will then select
+    the appropriate coordinate operation by comparing the input coordinates with
+    the area of use of the candidate coordinate operations.
 
     Example call:
 
     .. code-block:: C
 
-        PJ *P = proj_create_crs_to_crs(0, "epsg:25832", "epsg:25833", 0);
+        PJ *P = proj_create_crs_to_crs(0, "EPSG:25832", "EPSG:25833", 0);
+
+    If creation of the transformation object fails, the function returns `0` and
+    the PROJ error number is updated. The error number can be read with
+    :c:func:`proj_errno` or :c:func:`proj_context_errno`.
+
 
     The returned :c:type:`PJ`-pointer should be deallocated with :c:func:`proj_destroy`.
 
     :param PJ_CONTEXT* ctx: Threading context.
-    :param `srid_from`: Source SRID.
-    :type `srid_from`: const char*
-    :param `srid_to`: Destination SRID.
-    :type `srid_to`: const char*
+    :param `source_crs`: Source CRS.
+    :type `source_crs`: const char*
+    :param `target_crs`: Destination SRS.
+    :type `target_crs`: const char*
     :param `area`: Descriptor of the desired area for the transformation.
     :type `area`: PJ_AREA
     :returns: :c:type:`PJ*`
@@ -98,6 +150,45 @@ Transformation setup
 
     :param PJ* P:
     :returns: :c:type:`PJ*`
+
+Area of interest
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. versionadded:: 6.0.0
+
+
+.. c:function:: PJ_AREA* proj_area_create(void)
+
+    Create an area of use.
+
+    Such an area of use is to be passed to :c:func:`proj_create_crs_to_crs` to
+    specify the area of use for the choice of relevant coordinate operations.
+
+    :returns: :c:type:`PJ_AREA*` to be deallocated with :c:func:`proj_area_destroy`
+
+
+.. c:function:: void proj_area_set_bbox(PJ_AREA *area, double west_lon_degree, double south_lat_degree, double east_lon_degree, double north_lat_degree)
+
+    Set the bounding box of the area of use
+
+    Such an area of use is to be passed to :c:func:`proj_create_crs_to_crs` to
+    specify the area of use for the choice of relevant coordinate operations.
+
+    In the case of an area of use crossing the antimeridian (longitude +/- 180 degrees),
+    `west_lon_degree` will be greater than `east_lon_degree`.
+
+    :param `area`: Pointer to an object returned by :c:func:`proj_area_create`.
+    :param `west_lon_degree`: West longitude, in degrees. In [-180,180] range.
+    :param `south_lat_degree`: South latitude, in degrees. In [-90,90] range.
+    :param `east_lon_degree`: East longitude, in degrees. In [-180,180] range.
+    :param `north_lat_degree`: North latitude, in degrees. In [-90,90] range.
+
+.. c:function:: void proj_area_destroy(PJ_AREA* area)
+
+    Deallocate a :c:type:`PJ_AREA` object.
+
+    :param PJ_AREA* area
+
 
 .. _coord_trans_functions:
 
@@ -130,10 +221,16 @@ Coordinate transformation
         3. of length one, i.e. a constant, which will be treated as a fully
            populated array of that constant value
 
+    .. note:: Even though he coordinate components are named :c:data:`x`, :c:data:`y`,
+              :c:data:`z` and :c:data:`t`, axis ordering of the to and from CRS
+              is respected. Transformations exhibit the same behaviour
+              as if they were gathered in a :c:type:`PJ_COORD` struct.
+
+
     The strides, :c:data:`sx`, :c:data:`sy`, :c:data:`sz`, :c:data:`st`,
     represent the step length, in bytes, between
     consecutive elements of the corresponding array. This makes it possible for
-    :c:func:`proj_transform` to handle transformation of a large class of application
+    :c:func:`proj_trans_generic` to handle transformation of a large class of application
     specific data structures, without necessarily understanding the data structure
     format, as in:
 
@@ -159,21 +256,22 @@ Coordinate transformation
             0, 0                          /*  and the time is the constant 0.00 s */
         );
 
-    This is similar to the inner workings of the deprecated pj_transform function, but the
-    stride functionality has been generalized to work for any size of basic unit,
-    not just a fixed number of doubles.
+    This is similar to the inner workings of the deprecated :c:func:`pj_transform`
+    function, but the stride functionality has been generalized to work for any
+    size of basic unit, not just a fixed number of doubles.
 
     In most cases, the stride will be identical for x, y, z, and t, since they will
-    typically be either individual arrays (stride = sizeof(double)), or strided
-    views into an array of application specific data structures (stride = sizeof (...)).
+    typically be either individual arrays (``stride = sizeof(double)``), or strided
+    views into an array of application specific data structures (``stride = sizeof (...)``).
 
     But in order to support cases where :c:data:`x`, :c:data:`y`, :c:data:`z`,
     and :c:data:`t` come from heterogeneous sources, individual strides,
     :c:data:`sx`, :c:data:`sy`, :c:data:`sz`, :c:data:`st`, are used.
 
-    .. note:: Since :c:func:`proj_transform` does its work *in place*, this means that even the
-              supposedly constants (i.e. length 1 arrays) will return from the call in altered
-              state. Hence, remember to reinitialize between repeated calls.
+    .. note:: Since :c:func:`proj_trans_generic` does its work *in place*,
+              this means that even the supposedly constants (i.e. length 1 arrays)
+              will return from the call in altered state. Hence, remember to
+              reinitialize between repeated calls.
 
     :param PJ* P: Transformation object
     :param `direction`: Transformation direction
@@ -212,9 +310,22 @@ Error reporting
 
     Get a reading of the current error-state of :c:data:`P`. An non-zero error
     codes indicates an error either with the transformation setup or during a
-    transformation.
+    transformation. In cases :c:data:`P` is `0` the error number of the default
+    context is read. A text representation of the error number can be retrieved
+    with :c:func:`proj_errno_string`.
 
     :param: PJ* P: Transformation object.
+
+    :returns: :c:type:`int`
+
+.. c:function:: int proj_context_errno(PJ_CONTEXT *ctx)
+
+    Get a reading of the current error-state of :c:data:`ctx`. An non-zero error
+    codes indicates an error either with the transformation setup or during a
+    transformation. A text representation of the error number can be retrieved
+    with :c:func:`proj_errno_string`.
+
+    :param: PJ_CONTEXT* ctx: threading context.
 
     :returns: :c:type:`int`
 
@@ -268,14 +379,13 @@ Change the error-state of :c:data:`P` to `err`.
 
 .. c:function:: const char* proj_errno_string(int err)
 
+    .. versionadded:: 5.1.0
+
     Get a text representation of an error number.
 
     :param int err: Error number.
 
     :returns: :c:type:`const char*` String with description of error.
-
-    .. note:: Available from version 5.1.0.
-
 
 Logging
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -386,16 +496,19 @@ Distances
 
 .. c:function:: double proj_lp_dist(const PJ *P, PJ_COORD a, PJ_COORD b)
 
-    Calculate geodesic distance between two points in geodetic coordinates.
+    Calculate geodesic distance between two points in geodetic coordinates. The
+    calculated distance is between the two points located on the ellipsoid.
 
     :param PJ* P: Transformation object
     :param PJ_COORD a: Coordinate of first point
     :param PJ_COORD b: Coordinate of second point
     :returns: :c:type:`double` Distance between :c:data:`a` and :c:data:`b` in meters.
 
-.. c:function:: double proj_lp_dist(const PJ *P, PJ_COORD a, PJ_COORD b)
+.. c:function:: double proj_lpz_dist(const PJ *P, PJ_COORD a, PJ_COORD b)
 
     Calculate geodesic distance between two points in geodetic coordinates.
+    Similar to :c:func:`proj_lp_dist` but also takes the height above the ellipsoid
+    into account.
 
     :param PJ* P: Transformation object
     :param PJ_COORD a: Coordinate of first point
@@ -523,36 +636,44 @@ Various
     :returns: :c:type:`char*` Pointer to output buffer (same as :c:data:`s`)
 
 
-.. c:function:: PJ_COORD proj_geocentric_latitude(const PJ *P, PJ_DIRECTION direction, PJ_COORD coord)
-
-    Convert from geographical latitude to geocentric latitude.
-
-    :param `P`: Transformation object
-    :type `P`: const PJ*
-    :param `direction`: Starting direction of transformation
-    :type `direction`: PJ_DIRECTION
-    :param `coord`: Coordinate
-    :type `coord`: PJ_COORD
-    :returns: :c:type:`PJ_COORD` Converted coordinate
-
-
 .. c:function:: int proj_angular_input (PJ *P, enum PJ_DIRECTION dir)
 
-    Check if a operation expects angular input.
+    Check if a operation expects input in radians or not.
 
     :param `P`: Transformation object
     :type `P`: const PJ*
     :param `direction`: Starting direction of transformation
     :type `direction`: PJ_DIRECTION
-    :returns: :c:type:`int` 1 if angular input is expected, otherwise 0
+    :returns: :c:type:`int` 1 if input units is expected in radians, otherwise 0
 
 .. c:function:: int proj_angular_output (PJ *P, enum PJ_DIRECTION dir)
 
-   Check if an operation returns angular output.
+    Check if an operation returns output in radians or not.
 
     :param `P`: Transformation object
     :type `P`: const PJ*
     :param `direction`: Starting direction of transformation
     :type `direction`: PJ_DIRECTION
-    :returns: :c:type:`int` 1 if angular output is returned, otherwise 0
+    :returns: :c:type:`int` 1 if output units is expected in radians, otherwise 0
+
+C API for ISO-19111 functionality
++++++++++++++++++++++++++++++++++
+
+.. versionadded:: 6.0.0
+
+The PJ* objects returned by :c:func:`proj_create_from_wkt`,
+:c:func:`proj_create_from_database` and other functions in that section
+will have generally minimal interaction with the functions declared in the
+previous sections (calling those functions on those objects
+will either return an error or default/non-sensical values). The exception is
+for ISO19111 objects of type CoordinateOperation that can be exported as a
+valid PROJ pipeline. In this case,  objects will work for example with
+:c:func:`proj_trans_generic`.
+Conversely, objects returned by :c:func:`proj_create` and :c:func:`proj_create_argv`,
+which are not of type CRS (can be tested with :c:func:`proj_is_crs`),
+will return an error when used with functions of this section.
+
+.. doxygengroup:: iso19111_functions
+   :project: cpp_stuff
+   :content-only:
 

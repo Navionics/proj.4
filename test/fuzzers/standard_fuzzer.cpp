@@ -34,11 +34,11 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "projects.h" // For pj_gc_unloadall()
+#include "proj_internal.h" // For pj_gc_unloadall()
 #include "proj_api.h"
 
 /* Standalone build:
-g++ -g -std=c++11 standard_fuzzer.cpp -o standard_fuzzer -DSTANDALONE ../../src/.libs/libproj.a -lpthread -I../../src
+g++ -g -std=c++11 standard_fuzzer.cpp -o standard_fuzzer -fvisibility=hidden -DSTANDALONE ../../src/.libs/libproj.a -lpthread -lsqlite3 -I../../src -I../../include
 */
 
 extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv);
@@ -64,6 +64,14 @@ int LLVMFuzzerInitialize(int* /*argc*/, char*** argv)
 
 int LLVMFuzzerTestOneInput(const uint8_t *buf, size_t len)
 {
+    if( len > 1000 )
+    {
+#ifdef STANDALONE
+        fprintf(stderr, "Input too large\n");
+#endif
+        return 0;
+    }
+
     /* We expect the blob to be 3 lines: */
     /* source proj string\ndestination proj string\nx y */
     char* buf_dup = (char*)malloc(len+1);

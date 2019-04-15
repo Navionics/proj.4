@@ -13,18 +13,18 @@ cct
 Synopsis
 ********
 
-       **cct** [ **-cotvz** [ args ] ] *+opts[=arg]*  file[s]
+    **cct** [**-cIostvz** [args]] *+opt[=arg]* ... file ...
 
 Description
 ***********
 
 :program:`cct` a 4D equivalent to the :program:`proj` projection program,
-performs transformation coordinate systems on a set of input points.  The
-coordinate system transformation can include  translation  between projected
+performs transformation coordinate systems on a set of input points. The
+coordinate system transformation can include translation between projected
 and geographic coordinates as well as the application of datum shifts.
 
 
-The following control parameters can  appear  in any order:
+The following control parameters can appear in any order:
 
 .. program:: cct
 
@@ -32,23 +32,33 @@ The following control parameters can  appear  in any order:
 
     Specify input columns for (up to) 4 input parameters. Defaults to 1,2,3,4.
 
+.. option:: -d <n>
+
+.. versionadded:: 5.2.0
+
+    Specify the number of decimals in the output.
+
+.. option:: -I
+
+    Do the inverse transformation.
+
 .. option:: -o <output file name>, --output=<output file name>
 
     Specify the name of the output file.
 
 .. option:: -t <time>, --time=<time>
 
-    Specify a fixed observation time to be used for all input data.
+    Specify a fixed observation *time* to be used for all input data.
 
 .. option:: -z <height>, --height=<height>
 
-    Specify a fixed observation height to be used for all input data.
+    Specify a fixed observation *height* to be used for all input data.
 
-.. option:: s <n>, --skip-lines=<n>
+.. option:: -s <n>, --skip-lines=<n>
 
     .. versionadded:: 5.1.0
 
-    Skip the first *n* lines of input. This applies to any kind of input, wether
+    Skip the first *n* lines of input. This applies to any kind of input, whether
     it comes from ``STDIN``, a file or interactive user input.
 
 .. option:: -v, --verbose
@@ -60,7 +70,7 @@ The following control parameters can  appear  in any order:
 
     Print version number.
 
-The *+args* arguments are associated with coordinate operation parameters.
+The *+opt* arguments are associated with coordinate operation parameters.
 Usage varies with operation.
 
 .. only:: html
@@ -89,7 +99,7 @@ Examples
 
 .. code-block:: console
 
-     echo 12 55 0 0 | cct +proj=utm +zone=32 +ellps=GRS80
+      echo 12 55 0 0 | cct +proj=utm +zone=32 +ellps=GRS80
 
 will transform the input geographic coordinates into UTM zone 32 coordinates.
 Hence, the command
@@ -98,7 +108,7 @@ Hence, the command
 
       echo 12 55 | cct -z0 -t0 +proj=utm +zone=32 +ellps=GRS80
 
-Should give results comparable to the classic proj command
+Should give results comparable to the classic :program:`proj` command
 
 .. code-block:: console
 
@@ -120,15 +130,22 @@ Should give results comparable to the classic proj command
 
 .. code-block:: console
 
-      cct -c 5,2,1,4  +proj=utm +ellps=GRS80 +zone=32
+      cct -c 5,2,1,4 +proj=utm +ellps=GRS80 +zone=32
 
 5. As (2) but specify fixed height and time, hence needing only 2 cols in
    input:
 
 .. code-block:: console
 
-      cct -t 0 -z 0  +proj=utm  +ellps=GRS80  +zone=32
+      cct -t 0 -z 0 +proj=utm +ellps=GRS80 +zone=32
 
+6. Auxiliary data following the coordinate input is forward to the output
+   stream:
+
+.. code-block:: console
+
+    $ echo 12 56 100 2018.0 auxiliary data | cct +proj=merc
+    1335833.8895   7522963.2411      100.0000     2018.0000 auxiliary data
 
 Background
 **********
@@ -162,15 +179,15 @@ Hence, in honour of *cct* (the geodesist) this is :program:`cct` (the program).
     See also
     ********
 
-    **proj(1)**, **cs2cs(1)**, **geod(1)**, **gie(1)**
+    **proj(1)**, **cs2cs(1)**, **geod(1)**, **gie(1)**, **projinfo(1)**
 
     Bugs
     ****
 
-    A list of know bugs can be found at http://github.com/OSGeo/proj.4/issues
+    A list of know bugs can be found at https://github.com/OSGeo/proj.4/issues
     where new bug reports can be submitted to.
 
     Home page
     *********
 
-    http://proj4.org/
+    https://proj4.org/

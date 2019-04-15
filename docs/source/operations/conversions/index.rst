@@ -13,6 +13,9 @@ conversions.
 
    axisswap
    cart
-   lonlat
+   geoc
    latlon
+   noop
+   pop
+   push
    unitconvert

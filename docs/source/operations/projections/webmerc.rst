@@ -4,6 +4,8 @@
 Web Mercator / Pseudo Mercator
 ********************************************************************************
 
+.. versionadded:: 5.1.0
+
 The Web Mercator / Pseudo Mercator projection is a cylindrical map projection.
 This is a variant of the regular :ref:`merc` projection, except that the computation
 is done on a sphere, using the semi-major axis of the ellipsoid.
@@ -22,14 +24,19 @@ From `Wikipedia <https://en.wikipedia.org/wiki/Web_Mercator>`_:
 +---------------------+----------------------------------------------------------+
 | **Classification**  | Cylindrical (non conformant if used with ellipsoid)      |
 +---------------------+----------------------------------------------------------+
-| **Version**         | Added in proj 5.1.0                                      |
+| **Available forms** | Forward and inverse                                      |
 +---------------------+----------------------------------------------------------+
-| **Available forms** | Forward and inverse, spherical projection                |
+| **Defined area**    | Global                                                   |
 +---------------------+----------------------------------------------------------+
-| **Defined area**    | Global, but best used near the equator                   |
+| **Alias**           | webmerc                                                  |
 +---------------------+----------------------------------------------------------+
-| **Options**         | Neither lat_0, lon_0, lat_ts or k_0 should be used.      |
+| **Domain**          | 2D                                                       |
 +---------------------+----------------------------------------------------------+
+| **Input type**      | Geodetic coordinates                                     |
++---------------------+----------------------------------------------------------+
+| **Output type**     | Projected coordinates                                    |
++---------------------+----------------------------------------------------------+
+
 
 Usage
 ########
@@ -38,6 +45,21 @@ Example::
 
     $ echo 2 49 | proj +proj=webmerc +datum=WGS84
     222638.98       6274861.39
+
+Parameters
+################################################################################
+
+.. note:: All parameters for the projection are optional, except the ellipsoid
+          definition, which is WGS84 for the typical use case of EPSG:3857.
+          In which case, the other parameters are set to their default 0 value.
+
+.. include:: ../options/ellps.rst
+
+.. include:: ../options/lon_0.rst
+
+.. include:: ../options/x_0.rst
+
+.. include:: ../options/y_0.rst
 
 Mathematical definition
 #######################

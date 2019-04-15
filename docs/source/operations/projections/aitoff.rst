@@ -10,9 +10,31 @@ Aitoff
 +---------------------+----------------------------------------------------------+
 | **Defined area**    | Global                                                   |
 +---------------------+----------------------------------------------------------+
+| **Alias**           | aitoff                                                   |
++---------------------+----------------------------------------------------------+
+| **Domain**          | 2D                                                       |
++---------------------+----------------------------------------------------------+
+| **Input type**      | Geodetic coordinates                                     |
++---------------------+----------------------------------------------------------+
+| **Output type**     | Projected coordinates                                    |
++---------------------+----------------------------------------------------------+
 
-
-.. image:: ./images/aitoff.png
-   :scale: 50%
+.. figure:: ./images/aitoff.png
+   :width: 500 px
+   :align: center
    :alt:   Aitoff
 
+   proj-string: ``+proj=aitoff``
+
+Parameters
+################################################################################
+
+.. note:: All parameters for the projection are optional.
+
+.. include:: ../options/lon_0.rst
+
+.. include:: ../options/R.rst
+
+.. include:: ../options/x_0.rst
+
+.. include:: ../options/y_0.rst

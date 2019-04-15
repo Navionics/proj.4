@@ -14,16 +14,19 @@ California Cooperative Oceanic Fisheries Investigations program, known as CalCOF
 +---------------------+----------------------------------------------------------+
 | **Defined area**    | Only valid for the west coast of USA and Mexico          |
 +---------------------+----------------------------------------------------------+
-| **Implemented by**  | Frank Warmerdam                                          |
+| **Alias**           | calcofi                                                  |
 +---------------------+----------------------------------------------------------+
-| **Options**                                                                    |
+| **Domain**          | 2D                                                       |
 +---------------------+----------------------------------------------------------+
-| `No special options for this projection`                                       |
+| **Input type**      | Geodetic coordinates                                     |
 +---------------------+----------------------------------------------------------+
+| **Output type**     | Projected coordinates                                    |
++---------------------+----------------------------------------------------------+
+
 
 
 .. image:: ../../../images/calcofi.png
-   :scale: 50%
+   :width: 500 px
    :align: center
    :alt:   Cal Coop Ocean Fish Invest Lines/Stations
 
@@ -67,11 +70,20 @@ Output of the above command::
 
     80.0 60.0   -121.15 34.15
 
+Options
+################################################################################
+
+.. note:: All options are optional for the CalCOFI projection.
+
+.. include:: ../options/ellps.rst
+
+.. include:: ../options/R.rst
+
 Mathematical definition
 ################################################################################
 
-The algorithm used to make conversions is described in [EberHewitt1979]_ with
-a few corrections reported in [WeberMoore2013]_.
+The algorithm used to make conversions is described in :cite:`EberHewitt1979` with
+a few corrections reported in :cite:`WeberMoore2013`.
 
 
 Further reading

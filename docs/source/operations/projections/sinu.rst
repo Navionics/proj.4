@@ -4,11 +4,14 @@
 Sinusoidal (Sanson-Flamsteed)
 ********************************************************************************
 
-.. image:: ./images/sinu.png
-   :scale: 50%
+.. figure:: ./images/sinu.png
+   :width: 500 px
+   :align: center
    :alt:   Sinusoidal (Sanson-Flamsteed)
 
-MacBryde and Thomas developed generalized formulas for sever of the
+   proj-string: ``+proj=sinu``
+
+MacBryde and Thomas developed generalized formulas for several of the
 pseudocylindricals with sinusoidal meridians:
 
 .. math::
@@ -22,3 +25,15 @@ pseudocylindricals with sinusoidal meridians:
 
     C = \sqrt { (m + 1 ) / n }
 
+Parameters
+################################################################################
+
+.. note:: All parameters are optional for the Sinusoidal projection.
+
+.. include:: ../options/lon_0.rst
+
+.. include:: ../options/R.rst
+
+.. include:: ../options/x_0.rst
+
+.. include:: ../options/y_0.rst

@@ -11,20 +11,21 @@ Quadrilateralized Spherical Cube
 +---------------------+----------------------------------------------------------+
 | **Defined area**    | Global                                                   |
 +---------------------+----------------------------------------------------------+
-| **Implemented by**  | Martin Lambers                                           |
+| **Alias**           | qsc                                                      |
 +---------------------+----------------------------------------------------------+
-| **Options**                                                                    |
+| **Domain**          | 2D                                                       |
 +---------------------+----------------------------------------------------------+
-| `+lat_0`            | Latitude (in degrees) of the view position.              |
+| **Input type**      | Geodetic coordinates                                     |
 +---------------------+----------------------------------------------------------+
-| `+lon_0`            | Longitude (in degrees) of the view position.             |
+| **Output type**     | Projected coordinates                                    |
 +---------------------+----------------------------------------------------------+
+
 
 The purpose of the Quadrilateralized Spherical Cube (QSC) projection is to project
 a sphere surface onto the six sides of a cube:
 
 .. image:: ../../../images/qsc_concept.jpg
-   :scale: 50%
+   :width: 500 px
    :align: center
    :alt:   Quadrilateralized Spherical Cube
 
@@ -35,15 +36,15 @@ It is an equal-area projection, and at the same time introduces only limited ang
 distortions. It treats all cube sides equally, i.e. it does not use different
 projections for polar areas and equatorial areas. These properties make QSC
 projection a good choice for planetary-scale terrain rendering. Map data can be
-organized in quadtree structures for each cube side. See [LambersKolb2012]_ for an example.
+organized in quadtree structures for each cube side. See :cite:`LambersKolb2012` for an example.
 
-The QSC projection was introduced by [ONeilLaubscher1976]_,
-building on previous work by [ChanONeil1975]_. For clarity: The
-earlier QSC variant described in [ChanONeil1975]_ became known as the COBE QSC since it
+The QSC projection was introduced by :cite:`ONeilLaubscher1976`,
+building on previous work by :cite:`ChanONeil1975`. For clarity: The
+earlier QSC variant described in :cite:`ChanONeil1975` became known as the COBE QSC since it
 was used by the NASA Cosmic Background Explorer (COBE) project; it is an approximately
 equal-area projection and is not the same as the QSC projection.
 
-See also [CalabrettaGreisen2002]_ Sec. 5.6.2 and 5.6.3 for a description of both and
+See also :cite:`CalabrettaGreisen2002` Sec. 5.6.2 and 5.6.3 for a description of both and
 some analysis.
 
 In this implementation, the QSC projection projects onto one side of a circumscribed
@@ -64,7 +65,7 @@ cube. The cube side is selected by choosing one of the following six projection 
 +-------------------------+--------------------+
 
 Furthermore, this implementation allows the projection to be applied to ellipsoids.
-A preceding shift to a sphere is performed automatically; see [LambersKolb2012]_ for details.
+A preceding shift to a sphere is performed automatically; see :cite:`LambersKolb2012` for details.
 
 
 Usage
@@ -113,7 +114,7 @@ The resulting images can be laid out in a grid like below.
 
 
 .. |topside| image:: ../../../images/qsc_topside.jpg
-   :scale: 50%
+   :scale: 50 %
    :align: middle
    :alt:   Top side
 
@@ -150,6 +151,21 @@ The resulting images can be laid out in a grid like below.
 +------------+--------------+-------------+------------+
 |            | |bottomside| |             |            |
 +------------+--------------+-------------+------------+
+
+Parameters
+################################################################################
+
+.. note:: All parameters for the projection are optional.
+
+.. include:: ../options/lon_0.rst
+
+.. include:: ../options/lat_0.rst
+
+.. include:: ../options/ellps.rst
+
+.. include:: ../options/x_0.rst
+
+.. include:: ../options/y_0.rst
 
 Further reading
 ################################################################################

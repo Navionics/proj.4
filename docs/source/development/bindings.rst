@@ -8,14 +8,14 @@ PROJ bindings are available for a number of different development platforms.
 
 Python
 ======
-`pyproj <http://pypi.python.org/pypi/pyproj>`_:
+`pyproj <https://pypi.python.org/pypi/pyproj>`_:
 Python interface (wrapper for PROJ)
 
 
 Ruby
 =======
 
-`proj4rb <http://proj4rb.rubyforge.org>`_:
+`proj4rb <https://github.com/cfis/proj4rb>`_:
 Bindings for PROJ in ruby
 
 TCL
@@ -26,7 +26,7 @@ Bindings for PROJ in tcl (critcl source)
 MySQL
 =====
 
-`fProj4 <http://sourceforge.net/projects/mysqlscientific/files/fPROJ4/>`_:
+`fProj4 <https://sourceforge.net/projects/mysqlscientific/files/fPROJ4/>`_:
 Bindings for PROJ in MySQL
 
 
@@ -41,3 +41,9 @@ Visual Basic
 
 `PROJ VB Wrappers <http://ftp.dfg.ca.gov/Public/BDB/Tools/proj4/proj_api.zip>`_:
 By Eric G. Miller.
+
+Fortran
+=======
+
+`Fortran-Proj <https://gitlab.com/likeno/fortran-proj>`_:
+Bindings for PROJ in Fortran (By João Macedo @likeno)
